@@ -28,3 +28,33 @@ The updated `handle_connection` method not only reads the HTTP request but also 
 - Unlike before, it now completes the request-response cycle.
 
 ![Commit 2 screen capture](/img/commit2.png)
+
+## Commit 3 Reflection notes
+
+### Overview
+Initially, our server responded with `hello.html` for every request, regardless of the requested path. This approach was not practical, as a real web server should differentiate between valid and invalid requests. To improve this, we modified the `handle_connection` function to check the requested URL and serve appropriate responses.
+
+### Changes and Improvements
+1. **Request Validation**  
+   - The function now reads only the first line of the HTTP request to determine the requested path.
+   - If the request is for `/`, it serves `hello.html` with a `200 OK` response.
+   - If the request is for any other path, it serves `404.html` with a `404 NOT FOUND` response.
+
+2. **Selective Response Handling**  
+   - Introduced a conditional check to determine which file to serve.
+   - Returns different status codes based on whether the requested page exists.
+
+3. **Refactoring for Efficiency**  
+   - Previously, the server stored all request headers in a `Vec`, but now it only processes the first line.
+   - The response format is simplified and dynamically adjusts based on the file being served.
+
+### Why the Refactoring Was Needed
+- To make the server behave more like a real web server by handling valid and invalid requests differently.
+- To improve efficiency by reducing unnecessary request processing.
+- To provide a user-friendly error page instead of serving incorrect content.
+
+### Screenshot of the 404 Page
+![Commit 3 screen capture](/img/commit3.png)
+
+Now, when users visit `http://127.0.0.1:7878/`, they see the main page.  
+If they visit `http://127.0.0.1:7878/[something]`, they see a custom 404 error page.
