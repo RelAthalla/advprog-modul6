@@ -58,3 +58,24 @@ Initially, our server responded with `hello.html` for every request, regardless 
 
 Now, when users visit `http://127.0.0.1:7878/`, they see the main page.  
 If they visit `http://127.0.0.1:7878/[something]`, they see a custom 404 error page.
+
+## Commit 4 Reflection notes
+
+### Overview
+Previously, our server handled requests sequentially without any delays. However, real-world servers often experience slow responses due to heavy load or network latency. In this milestone, we introduced an artificial delay for a specific request (`/sleep`) to simulate a slow response.
+
+### Changes and Observations
+1. **Introducing a Delay for `/sleep`**
+   - We modified `handle_connection` to check if the request is for `/sleep`.
+   - If the request matches `GET /sleep HTTP/1.1`, the server waits **10 seconds** before responding.
+   - Other requests (`/`) still respond immediately.
+
+2. **Impact on Server Performance**
+   - Since the server runs on a **single thread**, handling a slow request blocks all other incoming requests.
+   - When opening `http://127.0.0.1:7878/sleep` in one tab and `http://127.0.0.1:7878/` in another, the second request **gets delayed until the first one finishes**.
+   - This behavior demonstrates the **limitations of single-threaded servers** in handling multiple concurrent users.
+
+3. **Why This Refactoring is Necessary**
+   - It highlights the need for **multi-threading** or **asynchronous processing** in web servers.
+   - A real-world server should handle multiple requests efficiently without one request blocking others.
+   - The next step is implementing **threaded request handling** to improve performance.
