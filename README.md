@@ -79,3 +79,35 @@ Previously, our server handled requests sequentially without any delays. However
    - It highlights the need for **multi-threading** or **asynchronous processing** in web servers.
    - A real-world server should handle multiple requests efficiently without one request blocking others.
    - The next step is implementing **threaded request handling** to improve performance.
+
+## Commit 5 Reflection notes
+
+### Overview
+In this milestone, we improved our web server by implementing a **ThreadPool** to handle multiple incoming requests concurrently. Previously, our server operated in a **single-threaded** manner, which caused performance issues when handling multiple clients.
+
+### Problem with Single-threaded Server
+Initially, our server processed requests **sequentially** using a single thread. This had a significant drawback:
+- If one request was slow (e.g., `GET /sleep` which waits for 10 seconds), it blocked all other incoming requests.
+- This led to high **latency** and **poor responsiveness**, making the server inefficient under heavy loads.
+
+### Solution: Implementing ThreadPool
+To address this issue, we introduced a **ThreadPool**, which allows multiple worker threads to handle requests concurrently. Key improvements:
+- **Parallel Processing**: Requests are distributed among available worker threads, reducing wait times.
+- **Non-blocking Execution**: Slow requests no longer delay the entire server.
+- **Scalability**: We can adjust the number of worker threads (`ThreadPool::new(4)`) based on server load.
+- **Better Performance**: The server can now handle multiple connections efficiently, improving response times.
+
+### How ThreadPool Works
+1. We create a `ThreadPool` with a **fixed number of worker threads**.
+2. When a request arrives, it is added to a **job queue**.
+3. Available worker threads pick up and process the jobs asynchronously.
+4. The server remains responsive even under high traffic.
+
+### Key Takeaways
+ **Concurrency Boost**: Multiple requests are handled in parallel, reducing response time.
+ **No More Blocking**: Slow requests do not stall other connections.
+ **Real-world Optimization**: Most production servers use similar multithreading techniques to improve efficiency.
+
+### Conclusion
+By implementing a **ThreadPool**, our web server is now more robust and scalable. It can handle multiple users simultaneously, making it significantly more efficient than the initial single-threaded version. 
+
