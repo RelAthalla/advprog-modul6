@@ -3,13 +3,13 @@ use std::{
     thread,
 };
 
-struct ThreadPool {
+pub struct ThreadPool {
     workers: Vec<Worker>,
     sender: mpsc::Sender<Job>,
 }
 
 impl ThreadPool {
-    fn new(size: usize) -> ThreadPool {
+    pub fn new(size: usize) -> ThreadPool {
         let (sender, receiver) = mpsc::channel();
         let receiver = Arc::new(Mutex::new(receiver));
 
@@ -21,7 +21,7 @@ impl ThreadPool {
         ThreadPool { workers, sender }
     }
 
-    fn execute<F>(&self, f: F)
+    pub fn execute<F>(&self, f: F)
     where
         F: FnOnce() + Send + 'static,
     {
