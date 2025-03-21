@@ -111,3 +111,6 @@ To address this issue, we introduced a **ThreadPool**, which allows multiple wor
 ### Conclusion
 By implementing a **ThreadPool**, our web server is now more robust and scalable. It can handle multiple users simultaneously, making it significantly more efficient than the initial single-threaded version. 
 
+## Commit 6 Reflection notes
+
+The build function enhances thread pool creation by introducing explicit error handling through a Result type. Instead of panicking when an invalid size (e.g., zero) is provided, it returns a PoolCreationError, allowing the caller to handle the issue gracefully. This approach improves code reliability and aligns with Rust’s best practices for error management. By using Result<ThreadPool, PoolCreationError> rather than Option<ThreadPool> or an immediate panic!, errors are handled more effectively, ensuring safer and more predictable execution. Additionally, this structured error handling makes future extensions and modifications easier without disrupting existing functionality.
